@@ -17,8 +17,8 @@ fi
 if [ "$1" = 'mysqld' ]; then
 	# Get config
 	DATADIR="$("$@" --verbose --help 2>/dev/null | awk '$1 == "datadir" { print $2; exit }')"
-	SOCKET=$(get_option  mysqld socket "$datadir/mysql.sock")
-	PIDFILE=$(get_option mysqld pid-file "/var/run/mysqld/mysqld.pid")
+	SOCKET=$(get_option  mysqld socket "$DATADIR/mysql.sock")
+	PIDFILE=$(get_option mysqld pid-file "/var/lib/mysql/mysqld.pid")
 
 	if [ ! -d "$DATADIR/mysql" ]; then
 		if [ -z "$MYSQL_ROOT_PASSWORD" -a -z "$MYSQL_ALLOW_EMPTY_PASSWORD" ]; then
@@ -26,27 +26,15 @@ if [ "$1" = 'mysqld' ]; then
 			echo >&2 '  Did you forget to add -e MYSQL_ROOT_PASSWORD=... ?'
 			exit 1
 		fi
+		mkdir -p /var/lib/mysql-files
 		if [ ! -d "$DATADIR" ]; then
 			mkdir -p $DATADIR
 		fi
 		chown -R mysql:mysql "$DATADIR"
 
-		# Workaround for bug related to --verbose --help
-		if [ -f "$DATADIR/ib_logfile0" ]; then
-			rm $DATADIR/ib_logfile0
-		fi
-		if [ -f "$DATADIR/ib_logfile1" ]; then
-			rm $DATADIR/ib_logfile1
-		fi
-		if [ -f "$DATADIR/ibdata1" ]; then
-			rm $DATADIR/ibdata1
-		fi
-		if [ -f "$DATADIR/ib_buffer_pool" ]; then
-			rm $DATADIR/ib_buffer_pool
-		fi
 		echo 'Initializing database'
-		mysqld --initialize-insecure=on --user=mysql --datadir=$DATADIR
-		echo 'Finished database init'
+		mysqld --initialize-insecure=on --datadir=$DATADIR
+		echo 'Database initialized'
 
 		mysqld --user=mysql --datadir=$DATADIR --skip-networking &
 		for i in $(seq 30 -1 0); do
@@ -54,7 +42,6 @@ if [ "$1" = 'mysqld' ]; then
 			echo 'MySQL init process in progress...'
 			sleep 1
 		done
-
 		if [ $i = 0 ]; then
 			echo >&2 'MySQL init process failed.'
 			exit 1
@@ -87,15 +74,14 @@ if [ "$1" = 'mysqld' ]; then
 		fi
 
 		echo 'FLUSH PRIVILEGES ;' >> "$tempSqlFile"
-
+		echo "Running init sql script."
 		mysql -uroot < $tempSqlFile
 
 		rm -f $tempSqlFile
 		kill $(cat $PIDFILE)
-
 		for i in $(seq 30 -1 0); do
 			[ -f "$PIDFILE" ] || break
-			echo 'MySQL init process in progress...'
+			echo 'MySQL shutdown in progress...'
 			sleep 1
 		done
 		if [ $i = 0 ]; then
@@ -107,4 +93,3 @@ if [ "$1" = 'mysqld' ]; then
 fi
 
 exec "$@"
-

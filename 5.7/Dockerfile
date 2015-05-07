@@ -1,18 +1,26 @@
 FROM oraclelinux:latest
-
 ## -- The environment variables set using ENV will persist when a container
 ## -- is run from the resulting image. -- ##
 
-ENV PACKAGE_URL http://repo.mysql.com/yum/mysql-5.7-community/docker/x86_64/mysql-community-server-minimal-5.7.7-0.3.rc.el7.x86_64.rpm
+ENV MYSQL_VERSION mysql-5.7.7-labs-json-linux-el6-x86_64
+ENV PATH $PATH:/mysql/bin
 
-# Install server
-RUN rpmkeys --import http://repo.mysql.com/RPM-GPG-KEY-mysql \
-  && yum install -y $PACKAGE_URL \
-  && rm -rf /var/cache/yum/*
+RUN yum install -y libaio wget tar \
+&& wget http://downloads.mysql.com/snapshots/pb/mysql-5.7.7-labs-json/$MYSQL_VERSION.tar.gz \
+&& adduser mysql \
+&& tar xvf $MYSQL_VERSION.tar.gz -C / \
+&& rm $MYSQL_VERSION.tar.gz \
+&& mv /$MYSQL_VERSION /mysql \
+&& rm -f /mysql/bin/mysqld-debug \
+&& rm -f /mysql/lib/* || true \
+&& strip /mysql/bin/* || true
+
 
 VOLUME /var/lib/mysql
+VOLUME /var/lib/mysql-files
 
 COPY docker-entrypoint.sh /entrypoint.sh
+COPY my.cnf /etc/mysql/my.cnf
 ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 3306
