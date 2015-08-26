@@ -1,6 +1,4 @@
 FROM oraclelinux:latest
-## -- The environment variables set using ENV will persist when a container
-## -- is run from the resulting image. -- ##
 
 ENV MYSQL_VERSION mysql-5.7.7-labs-json-linux-el6-x86_64
 ENV PATH $PATH:/mysql/bin
@@ -14,7 +12,6 @@ RUN yum install -y libaio wget tar \
 && rm -f /mysql/bin/mysqld-debug \
 && rm -f /mysql/lib/* || true \
 && strip /mysql/bin/* || true
-
 
 VOLUME /var/lib/mysql
 VOLUME /var/lib/mysql-files
