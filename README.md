@@ -2,20 +2,19 @@
 
 # What is MySQL Shell?
 
-MySQL Shell is the new client made to be used with MySQL's X Plugin, which enables MySQL to function as a document store. More information about this is available at https://dev.mysql.com/doc/refman/5.7/en/document-store.html
+MySQL Shell is a new command line client that supports interaction with MySQL Server through Javascript, Python and SQL. It covers the same area of usage as the `mysql` command line client, so you can use it to to perform classical relational SQL operations, while introducing a whole new area of functionality to query, update and manage MySQL as a document store, using popular scripting languages. More information about MySQL's new document store functionality is available at https://dev.mysql.com/doc/refman/5.7/en/document-store.html
 
-MySQL Shell is still in alpha, and this image is meant for previewing upcoming features.
+MySQL Shell is currently in alpha, and this Docker image is meant only for the purpose of previewing upcoming features.
 
-# Enabling mysqlx plugin on server
+# Enabling the mysqlx plugin on the MySQL server
 
-To use the new features of the X Plugin it must first be enabled on the server
+The new document store features of MySQL are implemented as a plugin to MySQL Server. This plugin needs to be enabled on the server before you can use the shell to access the new functionality. This needs to be done only once: the server will remember this setting on restart.
 
-To use the Shell image to enable the plugin, it can be started with the init command:
+Invoke the shell as follows:
 
     docker run -it -e MYSQL_HOST=mysqlhostname mysql-shell init
 
-You will be asked to enter the password for the server's root user. You should see the a message
-that the mysqlx plugin has been installed. This only needs to be done the first time.
+You will be asked to enter the password for the server's root user. You should see a message that the mysqlx plugin has been installed.
 
 # Connecting to mysqlx-enabled server
 
@@ -23,7 +22,7 @@ To connect to the server, simply run the mysql-shell image the same way you woul
  
     docker run -it mysql-shell -u <username> -h mysqlhostname
 
-Once logged in, if you run \status, you should see «Session type: X>
+Once logged in, if you run `\status`, the shell should respond with `Session type: X`.
 
 # Using MySQL Shell
 
@@ -31,7 +30,7 @@ For information on how to use MySQL Shell, refer to the user guide at https://de
 
 # Supported Docker Versions
 
-These images are officially supported by the MySQL team on Docker version 1.9. Support for older versions (down to 1.0) is provided on a best-effort basis, but we strongly recommend running on the most recent version, since that is assumed for parts of the documentation above.
+These images are officially supported by the MySQL team on Docker version 1.11. Support for older versions (down to 1.0) is provided on a best-effort basis, but we strongly recommend running on the most recent version, since that is assumed for parts of the documentation above.
 
 # User Feedback
 
