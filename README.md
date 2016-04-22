@@ -12,7 +12,7 @@ To use the new features of the X Plugin it must first be enabled on the server
 
 To use the Shell image to enable the plugin, it can be started with the init command:
 
- docker run -it -e MYSQL_HOST=mysqlhostname mysql-shell init
+    docker run -it -e MYSQL_HOST=mysqlhostname mysql-shell init
 
 You will be asked to enter the password for the server's root user. You should see the a message
 that the mysqlx plugin has been installed. This only needs to be done the first time.
@@ -21,13 +21,13 @@ that the mysqlx plugin has been installed. This only needs to be done the first 
 
 To connect to the server, simply run the mysql-shell image the same way you would start a normal MySQL client:
  
- docker run -it mysql-shell -u <username> -h mysqlhostname
+    docker run -it mysql-shell -u <username> -h mysqlhostname
 
 Once logged in, if you run \status, you should see «Session type: X>
 
 # Using MySQL Shell
 
-For information on how to use MySQL Shell, refer to the user guide at htps://dev.mysql.com/doc/refman/5.7/en/mysql-shell.html
+For information on how to use MySQL Shell, refer to the user guide at https://dev.mysql.com/doc/refman/5.7/en/mysql-shell.html
 
 # Supported Docker Versions
 
