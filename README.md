@@ -12,7 +12,7 @@ The new document store features of MySQL are implemented as a plugin to MySQL Se
 
 Invoke the shell as follows:
 
-    docker run -it -e MYSQL_HOST=mysqlhostname mysql-shell init
+    docker run -it -e MYSQL_HOST=<hostname> mysql-shell init
 
 You will be asked to enter the password for the server's root user. You should see a message that the mysqlx plugin has been installed.
 
@@ -20,7 +20,7 @@ You will be asked to enter the password for the server's root user. You should s
 
 To connect to the server, simply run the mysql-shell image the same way you would start a normal MySQL client:
  
-    docker run -it mysql-shell -u <username> -h mysqlhostname
+    docker run -it mysql-shell -u <username> -h <hostname>
 
 Once logged in, if you run `\status`, the shell should respond with `Session type: X`.
 
