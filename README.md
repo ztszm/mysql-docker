@@ -11,7 +11,7 @@ developers to extend MySQL Router for custom use cases.
 
 # Supported Tags and Respective Dockerfile Links
 
-* MySQL Router 8.0 (tag: [latest](https://github.com/mysql/mysql-docker/tree/mysql-router/8.0),[8.0](https://github.com/mysql/mysql-docker/tree/mysql-router/8.0),[8.0.4-rc](https://github.com/mysql/mysql-docker/tree/mysql-router/8.0) (mysql-router/8.0/Dockerfile)
+* MySQL Router 8.0, Release Candidate (tag: [`latest`, `8.0`, `8.0.4-rc`](https://github.com/mysql/mysql-docker/blob/mysql-router/8.0/Dockerfile)) ([mysql-router/8.0/Dockerfile](https://github.com/mysql/mysql-docker/blob/mysql-router/8.0/Dockerfile))
 
 Images are updated when new MySQL Server maintenance releases and development milestones are published. Please note that non-GA releases are for preview purposes only and should not be used in production setups.
 
